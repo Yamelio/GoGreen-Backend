@@ -224,4 +224,19 @@ class UserTable
         return $res;
     }
 
+    public static function checkLogin($login,$pass){
+
+        $res=Database::fetchOne("select uid,password,salt from user where login=:login",array(':login' => $login));
+        $realpass=$res["password"];
+        $salt=$res["salt"];
+        $id=$res["uid"];
+        $cryptedtest=crypt($pass,$salt);
+        if($realpass==$cryptedtest){
+            return $id;
+        }
+        else{
+            return false;
+        }
+    }
+
 }

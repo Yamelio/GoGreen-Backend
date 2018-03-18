@@ -1,25 +1,32 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Yamei
+ * Date: 18/03/2018
+ * Time: 22:21
+ */
+
 namespace Pages;
 
-use Tables\UserTable;
+use Tables\LoginTable;
 
 
-class User extends Page
+class Login extends Page
 
 {
     public function GET($parameters)
     {
-        return UserTable::getUsers();
+        return array("Nope" => "Not supported");
     }
 
     public function POST($parameters)
     {
-        return array("Nope" => "Not supported");
+        return LoginTable::checkLogin($parameters["login"],$parameters["pass"]);
     }
 
     public function PUT($parameters)
     {
-        return UserTable::addUser($parameters["name"],$parameters["surname"],$parameters["login"],$parameters["pass"],$parameters["address"], $parameters["company"], $parameters["phoneNumber"]);
+        return array("Nope" => "Not supported");
     }
 
     public function DELETE($parameters)
