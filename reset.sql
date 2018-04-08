@@ -4,6 +4,12 @@ START TRANSACTION;
 SET time_zone = "+00:00";
 
 
+DROP TABLE IF EXISTS `passenger`;
+CREATE TABLE `passenger` (
+  `bid` bigint(20) UNSIGNED NOT NULL,
+  `passenger` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 DROP TABLE IF EXISTS `bid`;
 CREATE TABLE `bid` (
   `id` bigint(20) UNSIGNED NOT NULL,
@@ -20,21 +26,6 @@ CREATE TABLE `car` (
   `licencePlate` varchar(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-
-DROP TABLE IF EXISTS `company`;
-CREATE TABLE `company` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(64) NOT NULL,
-  `address` varchar(512) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
-DROP TABLE IF EXISTS `passenger`;
-CREATE TABLE `passenger` (
-  `bid` bigint(20) UNSIGNED NOT NULL,
-  `passenger` bigint(20) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` bigint(20) UNSIGNED NOT NULL,
@@ -47,6 +38,13 @@ CREATE TABLE `user` (
   `company` bigint(20) UNSIGNED NOT NULL,
   `phoneNumber` varchar(20) NOT NULL,
   `rate` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `company`;
+CREATE TABLE `company` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `address` varchar(512) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 ALTER TABLE `bid`
@@ -98,4 +96,6 @@ ALTER TABLE `passenger`
 
 ALTER TABLE `user`
   ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`company`) REFERENCES `company` (`id`) ON UPDATE CASCADE;
+
+INSERT INTO company (name, address) VALUES ("Company1","Address1");
 COMMIT;

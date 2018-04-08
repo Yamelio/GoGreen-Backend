@@ -11,13 +11,15 @@ class UserModel
     private $name;
     private $surname;
     private $login;
+    /*
     private $password;
     private $salt;
+    */
     private $address;
     private $company;
     private $phoneNumber;
     private $rate;
-
+/*
     public function __construct($id, $name, $surname, $login, $password, $salt, $address, $company, $phoneNumber, $rate)
     {
         $this->id = $id;
@@ -26,6 +28,18 @@ class UserModel
         $this->login = $login;
         $this->password = $password;
         $this->salt = $salt;
+        $this->address = $address;
+        $this->company = $company;
+        $this->phoneNumber = $phoneNumber;
+        $this->rate = $rate;
+    }
+*/
+    public function __construct($id, $name, $surname, $login, $address, $company, $phoneNumber, $rate)
+    {
+        $this->id = $id;
+        $this->name = $name;
+        $this->surname = $surname;
+        $this->login = $login;
         $this->address = $address;
         $this->company = $company;
         $this->phoneNumber = $phoneNumber;
@@ -98,7 +112,7 @@ class UserModel
 
     /**
      * @return mixed
-     */
+
     public function getPassword()
     {
         return $this->password;
@@ -106,7 +120,7 @@ class UserModel
 
     /**
      * @param mixed $password
-     */
+
     public function setPassword($password)
     {
         $this->password = $password;
@@ -114,7 +128,7 @@ class UserModel
 
     /**
      * @return mixed
-     */
+
     public function getSalt()
     {
         return $this->salt;
@@ -122,7 +136,7 @@ class UserModel
 
     /**
      * @param mixed $salt
-     */
+
     public function setSalt($salt)
     {
         $this->salt = $salt;
@@ -198,8 +212,10 @@ class UserModel
             "name" => $this->name,
             "surname" => $this->surname,
             "login" => $this->login,
+            /*
             "password" => $this->password,
             "salt" => $this->salt,
+            */
             "address" => $this->address,
             "company" => $this->company,
             "phoneNumber" => $this->phoneNumber,
@@ -217,26 +233,19 @@ class UserTable
 
         $res=array();
         foreach ($req as $row) {
-            $user = new UserModel($row[0], $row[1], $row[2], $row[3], $row[4], $row[5], $row[6], $row[7], $row[8], $row[9]);
+            $user = new UserModel($row[0], $row[1], $row[2], $row[3], $row[6], $row[7], $row[8], $row[9]);
             $res[]=$user->toArray();
         }
-
         return $res;
     }
 
-    public static function checkLogin($login,$pass){
+    public static function AddUser($name,$surname,$login,$pass,$address, $company, $phoneNumber){
 
-        $res=Database::fetchOne("select uid,password,salt from user where login=:login",array(':login' => $login));
-        $realpass=$res["password"];
-        $salt=$res["salt"];
-        $id=$res["uid"];
-        $cryptedtest=crypt($pass,$salt);
-        if($realpass==$cryptedtest){
-            return $id;
-        }
-        else{
-            return false;
-        }
+        $salt=mcrypt_create_iv(32,MCRYPT_DEV_URANDOM);
+        $crypted_pw=crypt($pass,$salt);
+        $req="insert into user(name,surname,login,password,salt,address,company,phoneNumber,rate) values(:name, :surname, :login, :password, :salt, :address, :company, :phoneNumber, '5');";
+        $params=array(':name' => $name, ':surname' => $surname, ':login' => $login, ':password' => $crypted_pw,':salt' => $salt, ':address' => $address, ':company' => $company, ':phoneNumber' => $phoneNumber);
+        Database::execInser($req,$params);
+        return "ok";
     }
-
 }

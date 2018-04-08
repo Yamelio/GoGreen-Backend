@@ -13,27 +13,27 @@ error_reporting(E_ERROR | E_PARSE);
 
 require_once __DIR__."/vendor/autoload.php";
 $method = $_SERVER["REQUEST_METHOD"];
-use Pages\User;
-$user=new User();
+use Pages\Passenger;
+$passenger=new Passenger();
 switch($method) {
     case "GET":
-        echo json_encode($user->GET($_GET));
+        echo json_encode($passenger->GET($_GET));
         break;
 
     case "POST":
-        echo json_encode($user->POST($_POST));
+        echo json_encode($passenger->POST($_POST));
         break;
 
     case "PUT":
         parse_str(file_get_contents("php://input"), $parameters);
-        echo json_encode($user->PUT($_GET));
+        echo json_encode($passenger->PUT($_GET));
         break;
 
     case "DELETE":
         parse_str(file_get_contents("php://input"), $parameters);
-        echo json_encode($user->DELETE($parameters));
+        echo json_encode($passenger->DELETE($parameters));
         break;
 
     default:
-        echo json_encode($user->OTHER());
+        echo json_encode($passenger->OTHER());
 }
