@@ -16,9 +16,11 @@ class UserModel
     private $salt;
     */
     private $address;
-    private $company;
     private $phoneNumber;
     private $rate;
+    private $companyName;
+    private $companyAddress;
+
 /*
     public function __construct($id, $name, $surname, $login, $password, $salt, $address, $company, $phoneNumber, $rate)
     {
@@ -34,16 +36,18 @@ class UserModel
         $this->rate = $rate;
     }
 */
-    public function __construct($id, $name, $surname, $login, $address, $company, $phoneNumber, $rate)
+    public function __construct($id, $name, $surname, $login, $address, $phoneNumber, $rate, $companyName, $companyAddress)
     {
         $this->id = $id;
         $this->name = $name;
         $this->surname = $surname;
         $this->login = $login;
         $this->address = $address;
-        $this->company = $company;
         $this->phoneNumber = $phoneNumber;
         $this->rate = $rate;
+        $this->companyName = $companyName;
+        $this->companyAddress = $companyAddress;
+
     }
 
     /**
@@ -112,38 +116,6 @@ class UserModel
 
     /**
      * @return mixed
-
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * @param mixed $password
-
-    public function setPassword($password)
-    {
-        $this->password = $password;
-    }
-
-    /**
-     * @return mixed
-
-    public function getSalt()
-    {
-        return $this->salt;
-    }
-
-    /**
-     * @param mixed $salt
-
-    public function setSalt($salt)
-    {
-        $this->salt = $salt;
-    }
-
-    /**
-     * @return mixed
      */
     public function getAddress()
     {
@@ -156,22 +128,6 @@ class UserModel
     public function setAddress($address)
     {
         $this->address = $address;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCompany()
-    {
-        return $this->company;
-    }
-
-    /**
-     * @param mixed $company
-     */
-    public function setCompany($company)
-    {
-        $this->company = $company;
     }
 
     /**
@@ -206,20 +162,50 @@ class UserModel
         $this->rate = $rate;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getCompanyName()
+    {
+        return $this->companyName;
+    }
+
+    /**
+     * @param mixed $companyName
+     */
+    public function setCompanyName($companyName)
+    {
+        $this->companyName = $companyName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCompanyAddress()
+    {
+        return $this->companyAddress;
+    }
+
+    /**
+     * @param mixed $companyAddress
+     */
+    public function setCompanyAddress($companyAddress)
+    {
+        $this->companyAddress = $companyAddress;
+    }
+
+
     public function toArray() {
         return array(
             "id" => $this->id,
             "name" => $this->name,
             "surname" => $this->surname,
             "login" => $this->login,
-            /*
-            "password" => $this->password,
-            "salt" => $this->salt,
-            */
             "address" => $this->address,
-            "company" => $this->company,
             "phoneNumber" => $this->phoneNumber,
-            "rate" => $this->rate
+            "rate" => $this->rate,
+            "compayName"=>$this->companyName,
+            "companyAddress" => $this->companyAddress
         );
     }
 }
@@ -229,11 +215,11 @@ class UserTable
 {
     public static function getUsers(){
 
-        $req=Database::fetchAll("select * from user;");
+        $req=Database::fetchAll("select * from user as u, company as c where u.company=c.id and c.id=1;");
 
         $res=array();
         foreach ($req as $row) {
-            $user = new UserModel($row[0], $row[1], $row[2], $row[3], $row[6], $row[7], $row[8], $row[9]);
+            $user = new UserModel($row[0], $row[1], $row[2], $row[3], $row[6], $row[8], $row[9], $row[11], $row[12]);
             $res[]=$user->toArray();
         }
         return $res;
