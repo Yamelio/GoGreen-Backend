@@ -15,12 +15,15 @@ class LoginTable
 
     public static function checkLogin($login,$pass){
 
+
         $res=Database::fetchOne("select id,password,salt from user where login=:login",array(':login' => $login));
         $realpass=$res["password"];
         $salt=$res["salt"];
         $id=$res["id"];
         $cryptedtest=crypt($pass,$salt);
         if($realpass==$cryptedtest){
+            session_start();
+            $_SESSION["login"]=$id;
             return $id;
         }
         else{
